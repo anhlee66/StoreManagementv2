@@ -2,7 +2,7 @@
 create database StoreManagement;
 use StoreManagement;
 
-create login storeManagement with password='1234', Check_Policy=off;
+create login store with password='1234', Check_Policy=off;
 
 drop table if exists InvoiceDetails;
 drop table if exists Invocies;
@@ -25,7 +25,6 @@ create table Categories
 );
 go
 
-select * from Categories;
 create table Products
 (
 	Id int primary key identity,
@@ -111,8 +110,6 @@ insert into Categories (Name, Unit) values
 (N'Cửa sổ', N'Cái');
 
 --update Categories set unit=N'Viên' where id=2;
-select * from Categories;
--- Thêm dữ liệu vào bảng Products
 insert into Products (Name, Quantity, Import, Price, Supplier, CategoryId) values
 (N'Bao xi măng Holcim 50kg', 100, 100000, 150000, N'Công ty xi măng Holcim Việt Nam', 1),
 (N'Gạch Viglacera 10x10cm', 5000, 500, 1000, N'Công ty Viglacera', 2),
@@ -189,25 +186,8 @@ insert into ReceiptDetails (ReceiptId, ProductId, Amount, Import) values
 (3, 6, 5, 40.00),
 (4, 7, 1, 100.00),
 (4, 8, 3, 150.00);
-select * from invoices;
-
-select * from Products;
-
-Select * from Accounts where LoginName='nvana';
-Select p.Name,c.Name,Quantity,Import, Price,Supplier from  Products p 
-inner join Categories c on c.Id = p.Id
-
-select * from products where name like '%cUa%';
-select * from Categories where Id not in(select distinct CategoryId from Products);
-
-select id from Products where 
-	Id not in (Select ProductId from InvoiceDetails) and
-	Id not in (Select ProductId from ReceiptDetails )and Quantity = 0;
-
-select * from Products where Id!=1;
 
 
-;
 
 drop procedure if exists GetInvoice;
 create procedure GetInvoice
@@ -229,8 +209,6 @@ go
 
 
 
-exec GetInvoice;
-
 create procedure GetStatictis
 as
 begin
@@ -240,8 +218,6 @@ begin
 		inner join Products p on id.ProductId = p.Id
 end;
 go
-
-Exec GetStatictis;
 
 
 create procedure GetTopProductsSale(@number int)
@@ -253,10 +229,6 @@ begin
 	order by sum(Amount) desc;
 end;
 go
-select * from Products
-select * from InvoiceDetails;
 
-select * from employees;
 insert into Employees values(N'Dương Minh Nhí','0765189055',1,'Cần Thơ');
-select * from Accounts;
 insert into Accounts values('dnhi','12345',5);

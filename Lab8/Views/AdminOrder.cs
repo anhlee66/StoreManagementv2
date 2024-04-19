@@ -143,20 +143,23 @@ namespace Lab8
         private void btnAdd_Click(object sender, EventArgs e)
         {
             //MessageBox.Show(drSelected.Cells["ProductName"].Value.ToString());
-            int quantity = Convert.ToInt32(drSelected.Cells["Quantity"].Value);
-            if (quantity > 0)
+             if(drSelected.Selected != null) { }
             {
-                InvoiceDetail invoices = new InvoiceDetail(this);
-                invoices.Id = Convert.ToInt32(drSelected.Cells["ProductId"].Value);
-                invoices.Name = drSelected.Cells["ProductName"].Value.ToString();
-                invoices.MaxQuantity = quantity;
-                invoices.Quantity = 1;
-                invoices.Price = Convert.ToInt32(drSelected.Cells["Price"].Value);
-                invoices.Width = flowInvoices.Width - 20;
-                //dgvProducts.Rows.Remove(drSelected);
-                flowInvoices.Controls.Add(invoices);
-                invoiceSelectedProduct();
-                calculateTotalPrice();
+                int quantity = Convert.ToInt32(drSelected.Cells["Quantity"].Value);
+                if (quantity > 0)
+                {
+                    InvoiceDetail invoices = new InvoiceDetail(this);
+                    invoices.Id = Convert.ToInt32(drSelected.Cells["ProductId"].Value);
+                    invoices.Name = drSelected.Cells["ProductName"].Value.ToString();
+                    invoices.MaxQuantity = quantity;
+                    invoices.Quantity = 1;
+                    invoices.Price = Convert.ToInt32(drSelected.Cells["Price"].Value);
+                    invoices.Width = flowInvoices.Width - 20;
+                    //dgvProducts.Rows.Remove(drSelected);
+                    flowInvoices.Controls.Add(invoices);
+                    invoiceSelectedProduct();
+                    calculateTotalPrice();
+                }
             }
 
         }
@@ -213,6 +216,7 @@ namespace Lab8
                     {
                         invoice_Load();
                         invoicesList_Load();
+                        storage_Load("");
                         MessageBox.Show("Create a new invoice", "Create invoice");
                     }
                     else
@@ -259,7 +263,7 @@ namespace Lab8
                 try
                 {
                     DBHandle.OpenConnection();
-                    string query = string.Format("insert into InvoiceDetails values({0},{1},{2},{3})",Id,productId,amount,price);
+                    string query = string.Format("insert into InvoiceDetails values({0},{1},{2},{3}); update Products set quantity=quantity-{2} where Id={1};",Id,productId,amount,price);
                     SqlCommand cmd = new SqlCommand(query, DBHandle.con);
                     if(cmd.ExecuteNonQuery() < 0)
                     {
